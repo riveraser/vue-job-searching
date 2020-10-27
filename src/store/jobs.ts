@@ -17,7 +17,7 @@ export default class extends VuexModule {
   
   @Getter()
   getJobsDetail(): jobsResultsInterface {
-    return this._jobsDetail;
+    return  this._jobsDetail;
   }
 
   @Getter()
@@ -75,10 +75,12 @@ export default class extends VuexModule {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.get(url);
       context.commit("setJobsDetail", data);
+      return data;
     } catch (error) {
       context.commit("setJobsDetail", {});
       // throw error;
       console.log("Error searching jobs: ", error);
+      return;
     } finally {
       context.commit("setStopProcessing", null, { root: true });
     }

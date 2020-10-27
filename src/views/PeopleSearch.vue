@@ -1,5 +1,134 @@
 <template>
-  <div class="about">
-    <h1>This the Search page</h1>
-  </div>
+  <v-row>
+    <SearchForm
+      :search.sync="searchText"
+      :label="$t('forms.peopleSearch')"
+      @do-search="searchPeople"
+    ></SearchForm>
+    <v-col cols="12" md="8" lg="9">
+      <v-card
+        v-for="job in jobListing"
+        v-bind:key="job.id"
+        class="mx-auto mb-12"
+      >
+        <template slot="progress">
+          <v-progress-linear
+            color="deep-purple"
+            height="10"
+            indeterminate
+          ></v-progress-linear>
+        </template>
+        <div class="d-flex flex-no-wrap justify-space-between">
+          <div>
+            <v-card-title>{{ job.objective }}</v-card-title>
+            <v-card-text>
+              <div class="my-4 subtitle-1">
+                $ {{ job.compensantion || `To be defined` }} •
+                {{ job.locations.toString() }}
+              </div>
+            </v-card-text>
+            <v-divider class="mx-4"></v-divider>
+            <v-card-title>Skills</v-card-title>
+
+            <v-card-text>
+              <v-chip-group column>
+                <v-chip v-for="skill in job.skills" v-bind:key="skill.name">
+                  {{ skill.experience }} - {{ skill.name }}
+                </v-chip>
+              </v-chip-group>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn color="deep-purple lighten-2" text>
+                {{ $t("navigation.seeDetails") }}
+              </v-btn>
+            </v-card-actions>
+          </div>
+          <div>
+            <v-avatar class="ma-3" size="125" tile>
+              <v-img
+                :src="
+                  job.organizations[0].picture
+                    ? job.organizations[0].picture
+                    : ''
+                "
+              ></v-img>
+            </v-avatar>
+            <div class="overline mb-4 text-center">
+              {{ job.organizations[0].name }}
+            </div>
+          </div>
+        </div>
+      </v-card>
+      <v-pagination
+        v-if="jobListing.length > 0"
+        v-model="currentPage"
+        :length="totalPages"
+        circle
+        total-visible="10"
+        :disabled="isProcessing"
+      ></v-pagination>
+    </v-col>
+  </v-row>
 </template>
+
+<script lang="ts">
+import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
+import SearchForm from "@/components/SearchForm";
+import { jobsResultsInterface } from "@/interfaces/jobs";
+
+@Component({
+  components: {
+    SearchForm
+  }
+})
+export default class Home extends Vue {
+  private searchText?: string = "";
+  private currentPage?: number = 1;
+  private tempSearch?: string = "";
+
+  @MapGetter()
+  getLanguage?: string;
+
+  @MapGetter()
+  getProcessing?: boolean;
+
+  @MapGetter({ namespace: "people" })
+  getPeople?: jobsResultsInterface;
+
+  @MapAction({ namespace: "people" })
+  fetchPeople?: any;
+
+  @MapAction({ namespace: "people" })
+  getPeoplePage?: number;
+
+  searchPeople() {
+    this.currentPage = 1;
+    this.fetchPeople({
+      search: this.searchText?.trim(),
+      page: this.currentPage - 1,
+      language: this.getLanguage
+    });
+    this.tempSearch = this.searchText;
+  }
+  @Watch("currentPage")
+  onPageChanged(value: number): void {
+    this.searchText = this.tempSearch;
+    this.fetchPeople({
+      search: this.searchText?.trim(),
+      page: value - 1,
+      language: this.getLanguage
+    });
+  }
+
+  get jobListing(): unknown[] {
+    return this.getPeople?.results || [];
+  }
+  get totalPages(): number {
+    return this.getPeople?.total ? Math.ceil(this.getPeople?.total / 10) : 0;
+  }
+  get isProcessing(): boolean {
+    return this.getProcessing || false;
+  }
+}
+</script>

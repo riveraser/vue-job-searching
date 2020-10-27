@@ -13,7 +13,9 @@
   },
   "forms":{
     "jobSearch": "Chercher un emploi",
+    "peopleSearch": "Chercher des personnes",
     "search": "Rechercher",
+    "results": "On a trouvé [QTY] résultats",
     "searchError":{
       "enterText": "Vous devez especifier une rechercher",
       "maxText": "Un maximum de 30 lettres es requis",

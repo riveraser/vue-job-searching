@@ -66,6 +66,7 @@
         :length="totalPages"
         circle
         total-visible="10"
+        :disabled="isProcessing"
       ></v-pagination>
     </v-col>
   </v-row>
@@ -84,9 +85,16 @@ import { jobsResultsInterface } from "@/interfaces/jobs";
 export default class Home extends Vue {
   private searchText?: string = "";
   private currentPage?: number = 1;
+  private tempSearch?: string = "";
 
   @MapGetter()
   getLanguage?: string;
+
+  @MapGetter()
+  getProcessing?: boolean;
+
+  @MapGetter({ namespace: "jobs" })
+  getJobs?: jobsResultsInterface;
 
   @MapAction({ namespace: "jobs" })
   fetchJobs?: any;
@@ -94,32 +102,33 @@ export default class Home extends Vue {
   @MapAction({ namespace: "jobs" })
   getJobsPage?: number;
 
-  @MapGetter({ namespace: "jobs" })
-  getJobs?: jobsResultsInterface;
-
   searchJobs() {
     this.currentPage = 1;
     this.fetchJobs({
-      search: this.searchText,
+      search: this.searchText?.trim(),
       page: this.currentPage - 1,
       language: this.getLanguage
     });
+    this.tempSearch = this.searchText;
   }
   @Watch("currentPage")
   onPageChanged(value: number): void {
-    console.log("Will move to", value);
+    this.searchText = this.tempSearch;
     this.fetchJobs({
-      search: this.searchText,
+      search: this.searchText?.trim(),
       page: value - 1,
       language: this.getLanguage
     });
   }
 
-  get jobListing() {
+  get jobListing(): unknown[] {
     return this.getJobs?.results || [];
   }
-  get totalPages() {
+  get totalPages(): number {
     return this.getJobs?.total ? Math.ceil(this.getJobs?.total / 10) : 0;
+  }
+  get isProcessing(): boolean {
+    return this.getProcessing || false;
   }
 }
 </script>

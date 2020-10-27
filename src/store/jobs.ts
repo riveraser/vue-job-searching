@@ -35,7 +35,6 @@ export default class extends VuexModule {
     dataQuery: any
   ): Promise<void> {
     const url = `search.torre.co/opportunities/_search/?currency=USD%24&page=${dataQuery.page}&periodicity=hourly&lang=${dataQuery.language}&size=10&aggregate=false&offset=${dataQuery.page*10}`;
-    console.log(url);
     try {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.post(url, {

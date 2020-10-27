@@ -3,8 +3,8 @@ const files = require.context(
   true, // subdirectories
   /.+\.json$/ // only .json
 );
-const messages = {};
-files.keys().forEach((fileName) => {
+const messages: any = {};
+files.keys().forEach((fileName: string) => {
   messages[fileName.replace(".json", "").replace("./", "")] = files(fileName);
 });
 export default messages;

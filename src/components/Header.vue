@@ -7,25 +7,24 @@
         contain
         :src="require('@/assets/logoSRmedium.png')"
         transition="scale-transition"
-        width="100%"
+        width="170"
       />
     </div>
-
     <v-spacer></v-spacer>
-
-    <v-btn
-      href="https://github.com/vuetifyjs/vuetify/releases/latest"
-      target="_blank"
-      text
-    >
-      <span class="mr-2">Latest Release</span>
-      <v-icon>mdi-open-in-new</v-icon>
-    </v-btn>
+    {{ $t("template.welcome") }}
+    <v-spacer></v-spacer>
+    <LanguageSelector></LanguageSelector>
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import LanguageSelector from "./LanguageSelector.vue";
+
+@Component({
+  components: {
+    LanguageSelector
+  }
+})
 export default class Header extends Vue {}
 </script>

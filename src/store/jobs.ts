@@ -45,7 +45,7 @@ export default class extends VuexModule {
     context: ActionContext<any, any>,
     dataQuery: any
   ): Promise<void> {
-    const url = `search.torre.co/opportunities/_search/?currency=USD%24&page=${dataQuery.page}&periodicity=hourly&lang=${dataQuery.language}&size=10&aggregate=false&offset=${dataQuery.page*10}`;
+    const url = `https://search.torre.co/opportunities/_search/?currency=USD%24&page=${dataQuery.page}&periodicity=hourly&lang=${dataQuery.language}&size=10&aggregate=false&offset=${dataQuery.page*10}`;
     try {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.post(url, {
@@ -70,7 +70,7 @@ export default class extends VuexModule {
     context: ActionContext<any, any>,
     jobId: string
   ): Promise<void> {
-    const url = `torre.co/api/opportunities/${jobId}`;
+    const url = `https://torre.co/api/opportunities/${jobId}`;
     try {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.get(url);

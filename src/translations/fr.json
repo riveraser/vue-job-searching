@@ -1,0 +1,22 @@
+{
+  "template": {
+    "copyright": "Tous droits réservés",
+    "termsUse": "Conditions d'utilisation",
+    "privacyPolicy": "Politique de confidentialité",
+    "welcome": "Bienvenue",
+    "optional": "- Optionnel  &nbsp;"
+  },
+  "navigation": {
+    "jobSearch": "Rechercher des offres d'emploi",
+    "peopleSearch" : "Recherche des personnes"
+  },
+  "forms":{
+    "jobSearch": "Chercher un emploi",
+    "search": "Rechercher",
+    "searchError":{
+      "enterText": "Vous devez especifier une rechercher",
+      "maxText": "Un maximum de 30 lettres es requis",
+      "notFound" : "Aucun résultat n'a été trouvé pour votre recherche"
+    }
+  }
+}

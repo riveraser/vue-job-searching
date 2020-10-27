@@ -8,7 +8,8 @@
   },
   "navigation": {
     "jobSearch": "Rechercher des offres d'emploi",
-    "peopleSearch" : "Recherche des personnes"
+    "peopleSearch" : "Recherche des personnes",
+    "seeDetails": "Voir plus de details"
   },
   "forms":{
     "jobSearch": "Chercher un emploi",

@@ -1,22 +1,16 @@
 import Vue from "vue";
-import {
-  Module,
-  VuexModule,
-  Getter,
-  Mutation,
-  Action
-} from "types-vue";
+import { Module, VuexModule, Getter, Mutation, Action } from "types-vue";
 import { ActionContext } from "vuex";
 
-import {jobsResults} from "@/interfaces/jobs";
+import { jobsResultsInterface } from "@/interfaces/jobs";
 
 @Module({ namespaced: true })
 export default class extends VuexModule {
-  _jobs: jobsResults = {} as jobsResults;
+  _jobs: jobsResultsInterface = {} as jobsResultsInterface;
   _page?: number = 0;
 
   @Getter()
-  getJobs(): jobsResults {
+  getJobs(): jobsResultsInterface {
     return this._jobs;
   }
 
@@ -38,17 +32,22 @@ export default class extends VuexModule {
   @Action({ useContext: true })
   async fetchJobs(
     context: ActionContext<any, any>,
-    search: string,
-    page = 0
+    dataQuery: any
   ): Promise<void> {
-    const url = `search.torre.co/opportunities/_search/?&page=${page}`;
+    const url = `search.torre.co/opportunities/_search/?currency=USD%24&page=${dataQuery.page}&periodicity=hourly&lang=${dataQuery.language}&size=10&aggregate=false&offset=${dataQuery.page*10}`;
+    console.log(url);
     try {
       context.commit("setStartProcessing", null, { root: true });
-      const { data } = await Vue.http.post(url, { search: search });
+      const { data } = await Vue.http.post(url, {
+        "skill/role": {
+          text: dataQuery.search,
+          experience: "potential-to-develop",
+        },
+      });
       context.commit("setJobs", data);
-      context.commit("setJobsPage", page);
+      context.commit("setJobsPage", dataQuery.page);
     } catch (error) {
-      context.commit("setJobs", {} as jobsResults);
+      context.commit("setJobs", {} as jobsResultsInterface);
       context.commit("setJobsPage", 0);
       // throw error;
       console.log("Error searching jobs: ", error);

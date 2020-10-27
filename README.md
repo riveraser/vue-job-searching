@@ -3,6 +3,7 @@ Will search for Jobs or people (users)
 
 Made by Sergio Rivera with Vue, Vuex, Vuetify, Typescript and vue-i18n for french, spanish and english translation:
 
+Preview at https://sergiorivera.me/vue-search-jobs/ 
 
 Due to my current projects, I am not able to finish template (pretty template) page details for User and Job Details.
 

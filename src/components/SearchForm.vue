@@ -10,7 +10,7 @@
         <v-text-field
           v-model="searchWord"
           :counter="30"
-          :rules="searchRules"
+          :rules="[(v) => !!v || $t('forms.searchError.enterText') , (v) => (v && v.length <= 30) || $t('forms.searchError.maxText')]"
           :label="label"
           required
           clearable
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Vue, Component, MapGetter, Prop } from "types-vue";
-import { jobsResultsInterface } from "@/interfaces/jobs";
+
 //import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
@@ -50,21 +50,14 @@ export default class SearchForm extends Vue {
   search?: string;
   @Prop()
   label?: string;
+  @Prop()
+  resultText?: string;
 
   @MapGetter()
   getProcessing?: boolean;
 
-  @MapGetter({ namespace: "jobs" })
-  getJobs?: jobsResultsInterface;
-
-  private searchRules: unknown[] = [
-    (v: string) => !!v || "Enter text",
-    (v: string) => (v && v.length <= 30) || this.$t("forms.searchError.maxText")
-  ];
-
   validate() {
     this.$refs.form.validate();
-
     if (this.valid) {
       this.$emit("do-search");
     }
@@ -82,19 +75,6 @@ export default class SearchForm extends Vue {
   }
   get isProcessing(): boolean {
     return this.getProcessing || false;
-  }
-  get resultText(): string {
-    if (this.getJobs) {
-      try {
-        return this.$t("forms.results")
-          .toString()
-          .replace("[QTY]", this.getJobs?.total.toString());
-      } catch {
-        return " ";
-      }
-    } else {
-      return " ";
-    }
   }
 }
 </script>

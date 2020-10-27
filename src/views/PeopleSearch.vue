@@ -3,37 +3,38 @@
     <SearchForm
       :search.sync="searchText"
       :label="$t('forms.peopleSearch')"
+      :resultText="resultText"
       @do-search="searchPeople"
     ></SearchForm>
     <v-col cols="12" md="8" lg="9">
       <v-card
-        v-for="job in jobListing"
-        v-bind:key="job.id"
+        v-for="people in peopleListing"
+        v-bind:key="people.username"
         class="mx-auto mb-12"
       >
-        <template slot="progress">
-          <v-progress-linear
-            color="deep-purple"
-            height="10"
-            indeterminate
-          ></v-progress-linear>
-        </template>
         <div class="d-flex flex-no-wrap justify-space-between">
           <div>
-            <v-card-title>{{ job.objective }}</v-card-title>
+            <v-card-title>
+              {{ people.name }}
+              -
+              <h6>{{ people.locationName }}</h6>
+            </v-card-title>
             <v-card-text>
               <div class="my-4 subtitle-1">
-                $ {{ job.compensantion || `To be defined` }} •
-                {{ job.locations.toString() }}
+                {{ people.professionalHeadline }}
               </div>
             </v-card-text>
+
             <v-divider class="mx-4"></v-divider>
             <v-card-title>Skills</v-card-title>
 
             <v-card-text>
               <v-chip-group column>
-                <v-chip v-for="skill in job.skills" v-bind:key="skill.name">
-                  {{ skill.experience }} - {{ skill.name }}
+                <v-chip v-for="skill in people.skills" v-bind:key="skill.name">
+                  <v-avatar left class="green">
+                    {{ skill.weight }}
+                  </v-avatar>
+                  {{ skill.name }}
                 </v-chip>
               </v-chip-group>
             </v-card-text>
@@ -45,23 +46,20 @@
             </v-card-actions>
           </div>
           <div>
-            <v-avatar class="ma-3" size="125" tile>
-              <v-img
-                :src="
-                  job.organizations[0].picture
-                    ? job.organizations[0].picture
-                    : ''
-                "
-              ></v-img>
+            <v-avatar v-if="people.picture" class="ma-3" size="100">
+              <v-img :src="people.picture"></v-img>
             </v-avatar>
-            <div class="overline mb-4 text-center">
-              {{ job.organizations[0].name }}
-            </div>
+            <v-avatar v-else class="ma-3" color="orange" size="100">
+              <span class="white--text headline">{{
+                getAvatarChars(people.name)
+              }}</span>
+            </v-avatar>
+            <div class="overline mb-4 text-center"></div>
           </div>
         </div>
       </v-card>
       <v-pagination
-        v-if="jobListing.length > 0"
+        v-if="peopleListing.length > 0"
         v-model="currentPage"
         :length="totalPages"
         circle
@@ -111,6 +109,22 @@ export default class Home extends Vue {
     });
     this.tempSearch = this.searchText;
   }
+  getAvatarChars(name: string): string {
+    const arrTempo = name.split(" ");
+    let ret;
+    switch (arrTempo.length) {
+      case 1:
+        ret = arrTempo[0].slice(0, 2);
+        break;
+      case 2:
+        ret = arrTempo[0].slice(0, 1) + "" + arrTempo[1].slice(0, 1);
+        break;
+      default:
+        ret = arrTempo[0].slice(0, 1) + "" + arrTempo[2].slice(0, 1);
+    }
+    return ret.toUpperCase();
+  }
+
   @Watch("currentPage")
   onPageChanged(value: number): void {
     this.searchText = this.tempSearch;
@@ -121,7 +135,7 @@ export default class Home extends Vue {
     });
   }
 
-  get jobListing(): unknown[] {
+  get peopleListing(): unknown[] {
     return this.getPeople?.results || [];
   }
   get totalPages(): number {
@@ -129,6 +143,20 @@ export default class Home extends Vue {
   }
   get isProcessing(): boolean {
     return this.getProcessing || false;
+  }
+
+  get resultText(): string {
+    if (this.getPeople) {
+      try {
+        return this.$t("forms.results")
+          .toString()
+          .replace("[QTY]", this.getPeople?.total.toString());
+      } catch (err) {
+        return " ";
+      }
+    } else {
+      return " ";
+    }
   }
 }
 </script>

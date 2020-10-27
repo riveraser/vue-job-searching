@@ -3,6 +3,7 @@
     <SearchForm
       :search.sync="searchText"
       :label="$t('forms.jobSearch')"
+      :resultText="resultText"
       @do-search="searchJobs"
     ></SearchForm>
     <v-col cols="12" md="8" lg="9">
@@ -11,13 +12,6 @@
         v-bind:key="job.id"
         class="mx-auto mb-12"
       >
-        <template slot="progress">
-          <v-progress-linear
-            color="deep-purple"
-            height="10"
-            indeterminate
-          ></v-progress-linear>
-        </template>
         <div class="d-flex flex-no-wrap justify-space-between">
           <div>
             <v-card-title>{{ job.objective }}</v-card-title>
@@ -129,6 +123,19 @@ export default class Home extends Vue {
   }
   get isProcessing(): boolean {
     return this.getProcessing || false;
+  }
+  get resultText(): string {
+    if (this.getJobs) {
+      try {
+        return this.$t("forms.results")
+          .toString()
+          .replace("[QTY]", this.getJobs?.total.toString());
+      } catch {
+        return " ";
+      }
+    } else {
+      return " ";
+    }
   }
 }
 </script>

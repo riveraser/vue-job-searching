@@ -1,0 +1,26 @@
+{
+  "template": {
+    "copyright": "All rights reserved",
+    "termsUse": "Terms of use",
+    "privacyPolicy": "Privacy Policy",
+    "welcome": "Welcome",
+    "optional": "- Optional  &nbsp;",
+    "details": "Details"
+  },
+  "navigation": {
+    "jobSearch": "Job Search",
+    "peopleSearch" : "People Search",
+    "seeDetails": "See details"
+  },
+  "forms":{
+    "jobSearch": "Search Jobs",
+    "peopleSearch": "Search for people",
+    "search": "Search",
+    "results": "We found [QTY] results for your search",
+    "searchError":{
+      "enterText": "Search is required",
+      "maxText": "Must not be more than 30 chars long",
+      "notFound" : "Your search did not found any matches"
+    }
+  }
+}

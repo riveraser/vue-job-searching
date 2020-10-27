@@ -10,7 +10,10 @@
         <v-text-field
           v-model="searchWord"
           :counter="30"
-          :rules="[(v) => !!v || $t('forms.searchError.enterText') , (v) => (v && v.length <= 30) || $t('forms.searchError.maxText')]"
+          :rules="[
+            v => !!v || $t('forms.searchError.enterText'),
+            v => (v && v.length <= 30) || $t('forms.searchError.maxText')
+          ]"
           :label="label"
           required
           clearable

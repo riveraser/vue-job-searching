@@ -10,6 +10,7 @@ Vue.http.interceptors.push((request:any, next: any) => {
     `Bearer ${window.localStorage.getItem("_token")}`
   );
   request.headers.set( "accept", "application/json, text/plain, */*");
+  request.headers.set( "Access-Control-Allow-Origin", "*");
   next();
 });
 //. Resource settings

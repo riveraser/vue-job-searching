@@ -26,7 +26,10 @@
 
             <v-card-text>
               <v-chip-group column>
-                <v-chip v-for="skill in job.skills" v-bind:key="skill.name">
+                <v-chip
+                  v-for="skill in job.skills"
+                  v-bind:key="`${job.id}-${skill.name}`"
+                >
                   {{ skill.experience }} - {{ skill.name }}
                 </v-chip>
               </v-chip-group>
@@ -69,7 +72,7 @@
     </v-col>
     <DialogInfo :show.sync="show" @change-state="cancelForm($event)">
       <template v-slot:header>
-        {{ $t("template.details") }} - {{ jobInfo.objective }}
+        {{ $t("template.details") }} - {{ jobDetail.objective }}
       </template>
 
       <p class="mt-2"></p>
@@ -78,7 +81,10 @@
       </div>
       <div>
         <h4>Details:</h4>
-        <p v-for="detail in jobInfo.details" v-bind:key="detail.code">
+        <p
+          v-for="detail in jobDetail.details"
+          v-bind:key="`${jobDetail.id}-${detail.code}-detail`"
+        >
           {{ detail.content }}
         </p>
       </div>
@@ -86,8 +92,8 @@
         <h3>Strengths</h3>
         <v-chip-group column>
           <v-chip
-            v-for="strength in jobInfo.strengths"
-            v-bind:key="strength.code"
+            v-for="strength in jobDetail.strengths"
+            v-bind:key="`${jobDetail.id}-${strength.code}-detail`"
           >
             {{ strength.name }} - {{ strength.experience }}
           </v-chip>
@@ -122,7 +128,7 @@ export default class Home extends Vue {
   private currentPage?: number = 1;
   private tempSearch?: string = "";
   private show?: boolean = false;
-  private jobInfo: any = { strengths: [] };
+  private jobInfo?: unknown = {};
 
   @MapGetter()
   getLanguage?: string;
@@ -134,10 +140,10 @@ export default class Home extends Vue {
   getJobs?: jobsResultsInterface;
 
   @MapGetter({ namespace: "jobs" })
-  getJobsDetail?: jobsResultsInterface;
+  getJobsDetail: any;
 
   @MapAction({ namespace: "jobs" })
-  fetchJobs?: any;
+  fetchJobs: any;
 
   @MapAction({ namespace: "jobs" })
   fetchJobsDetail?: any;
@@ -155,10 +161,9 @@ export default class Home extends Vue {
     this.tempSearch = this.searchText;
   }
   async showDetail(id: string) {
-    this.jobInfo = { strengths: [] };
-    await this.fetchJobsDetail(id);
-    if (this.getJobsDetail) {
-      this.jobInfo = this.getJobsDetail;
+    this.jobInfo = {};
+    this.jobInfo = await this.fetchJobsDetail(id);
+    if (this.jobInfo) {
       this.show = true;
     }
   }
@@ -184,6 +189,9 @@ export default class Home extends Vue {
   }
   get isProcessing(): boolean {
     return this.getProcessing || false;
+  }
+  get jobDetail() {
+    return this.jobInfo;
   }
   get resultText(): string {
     if (this.getJobs) {

@@ -45,7 +45,7 @@ export default class extends VuexModule {
     context: ActionContext<any, any>,
     dataQuery: any
   ): Promise<void> {
-    const url = `search.torre.co/people/_search/?currency=USD%24&page=${
+    const url = `https://search.torre.co/people/_search/?currency=USD%24&page=${
       dataQuery.page}&periodicity=hourly&lang=${
       dataQuery.language}&size=10&aggregate=false&offset=${
       dataQuery.page * 10}`;
@@ -77,7 +77,7 @@ export default class extends VuexModule {
      * 
      */
 
-    const url = `bio.torre.co/api/bios/${userId}`;
+    const url = `https://bio.torre.co/api/bios/${userId}`;
     try {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.get(url);

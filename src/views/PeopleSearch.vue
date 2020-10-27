@@ -40,7 +40,7 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text>
+              <v-btn color="deep-purple lighten-2" text @click="showDetail(people.username)" >
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
             </v-card-actions>
@@ -67,23 +67,61 @@
         :disabled="isProcessing"
       ></v-pagination>
     </v-col>
+    <DialogInfo :show.sync="show" @change-state="cancelForm($event)">
+      <template v-slot:header>
+        {{ $t("template.details") }} - {{ peopleInfo.objective }}
+      </template>
+
+      <p class="mt-2"></p>
+      <div>
+        <h2>Mas informacion aqui si hay tiempo agregar mas detalles</h2>
+      </div>
+      <div>
+        <h4>Details:</h4>
+        <p v-for="detail in peopleInfo.details" v-bind:key="detail.code">
+          {{ detail.content }}
+        </p>
+      </div>
+      <div>
+        <h3>Strengths</h3>
+        <v-chip-group column>
+          <v-chip
+            v-for="strength in peopleInfo.strengths"
+            v-bind:key="strength.code"
+          >
+            {{ strength.name }} - {{ strength.experience }}
+          </v-chip>
+        </v-chip-group>
+      </div>
+
+      <template v-slot:actions>
+        <v-spacer></v-spacer>
+        <v-btn depressed outlined @click="cancelForm(false)" color="primary"
+          >Ok</v-btn
+        >
+      </template>
+    </DialogInfo>
   </v-row>
 </template>
 
 <script lang="ts">
 import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
 import SearchForm from "@/components/SearchForm";
+import DialogInfo from "@/components/DialogInfo";
 import { jobsResultsInterface } from "@/interfaces/jobs";
 
 @Component({
   components: {
-    SearchForm
+    SearchForm,
+    DialogInfo
   }
 })
 export default class Home extends Vue {
   private searchText?: string = "";
   private currentPage?: number = 1;
   private tempSearch?: string = "";
+  private show?: boolean = false;
+  private peopleInfo: any = {};
 
   @MapGetter()
   getLanguage?: string;
@@ -94,8 +132,14 @@ export default class Home extends Vue {
   @MapGetter({ namespace: "people" })
   getPeople?: jobsResultsInterface;
 
+  @MapGetter({ namespace: "people" })
+  getPeopleDetail?: any;
+
   @MapAction({ namespace: "people" })
   fetchPeople?: any;
+
+  @MapAction({ namespace: "people" })
+  fetchPeopleDetail?: any;
 
   @MapAction({ namespace: "people" })
   getPeoplePage?: number;
@@ -109,6 +153,19 @@ export default class Home extends Vue {
     });
     this.tempSearch = this.searchText;
   }
+
+  async showDetail(id: string) {
+    this.peopleInfo = { strengths: [] };
+    await this.fetchPeopleDetail(id);
+    if (this.getPeopleDetail) {
+      this.peopleInfo = this.getPeopleDetail;
+      this.show = true;
+    }
+  }
+  cancelForm(resp: any) {
+    this.show = false;
+  }
+
   getAvatarChars(name: string): string {
     const arrTempo = name.split(" ");
     let ret;

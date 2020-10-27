@@ -33,7 +33,11 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text>
+              <v-btn
+                color="deep-purple lighten-2"
+                text
+                @click="showDetail(job.id)"
+              >
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
             </v-card-actions>
@@ -63,23 +67,62 @@
         :disabled="isProcessing"
       ></v-pagination>
     </v-col>
+    <DialogInfo :show.sync="show" @change-state="cancelForm($event)">
+      <template v-slot:header>
+        {{ $t("template.details") }} - {{ jobInfo.objective }}
+      </template>
+
+      <p class="mt-2"></p>
+      <div>
+        <h2>Mas informacion aqui si hay tiempo agregar mas detalles</h2>
+      </div>
+      <div>
+        <h4>Details:</h4>
+        <p v-for="detail in jobInfo.details" v-bind:key="detail.code">
+          {{ detail.content }}
+        </p>
+      </div>
+      <div>
+        <h3>Strengths</h3>
+        <v-chip-group column>
+          <v-chip
+            v-for="strength in jobInfo.strengths"
+            v-bind:key="strength.code"
+          >
+            {{ strength.name }} - {{ strength.experience }}
+          </v-chip>
+        </v-chip-group>
+      </div>
+
+      <template v-slot:actions>
+        <v-spacer></v-spacer>
+        <v-btn depressed outlined @click="cancelForm(false)" color="primary"
+          >Ok</v-btn
+        >
+      </template>
+    </DialogInfo>
   </v-row>
 </template>
 
 <script lang="ts">
 import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
 import SearchForm from "@/components/SearchForm";
+import DialogInfo from "@/components/DialogInfo";
+
 import { jobsResultsInterface } from "@/interfaces/jobs";
 
 @Component({
   components: {
-    SearchForm
+    SearchForm,
+    DialogInfo
   }
 })
 export default class Home extends Vue {
   private searchText?: string = "";
   private currentPage?: number = 1;
   private tempSearch?: string = "";
+  private show?: boolean = false;
+  private jobInfo: any = { strengths: [] };
 
   @MapGetter()
   getLanguage?: string;
@@ -90,8 +133,14 @@ export default class Home extends Vue {
   @MapGetter({ namespace: "jobs" })
   getJobs?: jobsResultsInterface;
 
+  @MapGetter({ namespace: "jobs" })
+  getJobsDetail?: jobsResultsInterface;
+
   @MapAction({ namespace: "jobs" })
   fetchJobs?: any;
+
+  @MapAction({ namespace: "jobs" })
+  fetchJobsDetail?: any;
 
   @MapAction({ namespace: "jobs" })
   getJobsPage?: number;
@@ -105,6 +154,18 @@ export default class Home extends Vue {
     });
     this.tempSearch = this.searchText;
   }
+  async showDetail(id: string) {
+    this.jobInfo = { strengths: [] };
+    await this.fetchJobsDetail(id);
+    if (this.getJobsDetail) {
+      this.jobInfo = this.getJobsDetail;
+      this.show = true;
+    }
+  }
+  cancelForm(resp: any) {
+    this.show = false;
+  }
+
   @Watch("currentPage")
   onPageChanged(value: number): void {
     this.searchText = this.tempSearch;

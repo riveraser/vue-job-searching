@@ -4,7 +4,8 @@
     "termsUse": "Términos de uso",
     "privacyPolicy": "Política de privacidad",
     "welcome": "Bienvenido",
-    "optional": "- Opcional  &nbsp;"
+    "optional": "- Opcional  &nbsp;",
+    "details": "Detalles"
   },
   "navigation": {
     "jobSearch": "Buscar ofertas laborales",

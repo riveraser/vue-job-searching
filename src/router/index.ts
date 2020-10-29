@@ -20,8 +20,7 @@ const routes: RouteConfig[] = [
 
 const router = new VueRouter({
   mode: "history",
-  base: window.location.pathname,
+  base: process.env.NODE_ENV === 'development' ? '/' : '/vue-search-jobs/', // To upload to my personal website real DIST path should be set here
   routes
 });
-
 export default router;

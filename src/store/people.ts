@@ -73,10 +73,9 @@ export default class extends VuexModule {
 
     /*******************
      * 
-     *  CORS ERROR, cannot fetch the data
-     * 
+     *  CORS ERROR, cannot fetch the data so the solution is to have a PHP file if needed: 
+     *  const url = `https://sergiorivera.me/vue-search-jobs/getTorreUser.php?user=${userId}`;
      */
-
     const url = `https://bio.torre.co/api/bios/${userId}`;
     try {
       context.commit("setStartProcessing", null, { root: true });

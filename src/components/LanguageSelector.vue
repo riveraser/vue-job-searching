@@ -20,7 +20,6 @@
   </v-menu>
 </template>
 <script lang="ts">
-//import { Component, Vue } from "vue-property-decorator";
 import { Vue, Component, MapAction, MapGetter } from "types-vue";
 
 @Component

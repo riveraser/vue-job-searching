@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/Home.vue";
 import PeopleSearch from "@/views/PeopleSearch.vue";
+//Global store
+import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -23,4 +25,11 @@ const router = new VueRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/vue-search-jobs/', // To upload to my personal website real DIST path should be set here
   routes
 });
+
+// To change the route
+router.beforeEach((to, from, next) => {
+  store.commit("setStartLoading");
+  next();
+});
+
 export default router;

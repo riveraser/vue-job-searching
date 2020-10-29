@@ -129,6 +129,9 @@ export default class Home extends Vue {
   @MapGetter()
   getProcessing?: boolean;
 
+  @MapAction()
+  stopLoading: any;
+
   @MapGetter({ namespace: "people" })
   getPeople?: jobsResultsInterface;
 
@@ -143,6 +146,10 @@ export default class Home extends Vue {
 
   @MapAction({ namespace: "people" })
   getPeoplePage?: number;
+  
+  mounted() {
+    this.stopLoading();
+  }
 
   searchPeople() {
     this.currentPage = 1;

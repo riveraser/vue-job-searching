@@ -136,11 +136,20 @@ export default class Home extends Vue {
   @MapGetter()
   getProcessing?: boolean;
 
+  @MapAction()
+  stopLoading: any;
+
   @MapGetter({ namespace: "jobs" })
   getJobs?: jobsResultsInterface;
 
   @MapGetter({ namespace: "jobs" })
-  getJobsDetail: any;
+  getSearchText?: string;
+
+  @MapGetter({ namespace: "jobs" })
+  getPage?: number;
+
+  @MapGetter({ namespace: "jobs" })
+  getJobsDetail: any | undefined;
 
   @MapAction({ namespace: "jobs" })
   fetchJobs: any;
@@ -148,17 +157,19 @@ export default class Home extends Vue {
   @MapAction({ namespace: "jobs" })
   fetchJobsDetail?: any;
 
-  @MapAction({ namespace: "jobs" })
-  getJobsPage?: number;
+  mounted() {
+    this.stopLoading();
+    this.searchText = this.getSearchText;
+    this.currentPage = this.getPage;
+  }
 
   searchJobs() {
     this.currentPage = 1;
     this.fetchJobs({
       search: this.searchText?.trim(),
-      page: this.currentPage - 1,
+      page: this.currentPage,
       language: this.getLanguage
     });
-    this.tempSearch = this.searchText;
   }
   async showDetail(id: string) {
     this.jobInfo = {};
@@ -173,10 +184,10 @@ export default class Home extends Vue {
 
   @Watch("currentPage")
   onPageChanged(value: number): void {
-    this.searchText = this.tempSearch;
+    this.searchText = this.getSearchText;
     this.fetchJobs({
       search: this.searchText?.trim(),
-      page: value - 1,
+      page: value,
       language: this.getLanguage
     });
   }

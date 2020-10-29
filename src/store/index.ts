@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     language: "en",
     processing: false,
+    loading: false
   },
   getters: {
     getLanguage(state): string {
@@ -19,6 +20,7 @@ export default new Vuex.Store({
       }
     },
     getProcessing: (state) => state.processing,
+    getLoading: (state) => state.loading,
   },
   mutations: {
     setLanguage(state, lang): void {
@@ -31,11 +33,23 @@ export default new Vuex.Store({
     setStopProcessing(state) {
       state.processing = false;
     },
+    setStartLoading(state){
+      state.loading = true;
+    },
+    setStopLoading(state){
+      state.loading = false;
+    }
   },
   actions: {
     changeLanguage(context, lang) {
       context.commit("setLanguage", lang);
     },
+    stopProcessing(context){
+      context.commit("setStopProcessing");
+    },
+    stopLoading(context){
+      context.commit("setStopLoading");
+    }
   },
   modules: { jobs, people }
 });

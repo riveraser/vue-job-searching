@@ -7,21 +7,27 @@ import { jobsResultsInterface } from "@/interfaces/jobs";
 @Module({ namespaced: true })
 export default class extends VuexModule {
   _jobs: jobsResultsInterface = {} as jobsResultsInterface;
-  _page?: number = 0;
+  _page?: number = 1;
   _jobsDetail: any;
+  _searchText?: string = "";
 
   @Getter()
   getJobs(): jobsResultsInterface {
     return this._jobs;
   }
-  
+
   @Getter()
   getJobsDetail(): jobsResultsInterface {
-    return  this._jobsDetail;
+    return this._jobsDetail;
   }
 
   @Getter()
-  getJobsPage(): number | undefined {
+  getSearchText(): string {
+    return this._searchText!;
+  }
+
+  @Getter()
+  getPage(): number | undefined {
     return this._page;
   }
 
@@ -29,15 +35,20 @@ export default class extends VuexModule {
   setJobs(value: any): void {
     this._jobs = value;
   }
-  
+
   @Mutation()
   setJobsDetail(value: any): void {
     this._jobsDetail = value;
   }
 
   @Mutation()
-  setJobsPage(value: number): void {
+  setPage(value: number): void {
     this._page = value;
+  }
+
+  @Mutation()
+  setSearchText(value: string): void {
+    this._searchText = value;
   }
 
   @Action({ useContext: true })
@@ -45,7 +56,14 @@ export default class extends VuexModule {
     context: ActionContext<any, any>,
     dataQuery: any
   ): Promise<void> {
-    const url = `https://search.torre.co/opportunities/_search/?currency=USD%24&page=${dataQuery.page}&periodicity=hourly&lang=${dataQuery.language}&size=10&aggregate=false&offset=${dataQuery.page*10}`;
+    context.commit("setSearchText", dataQuery.search);
+    context.commit("setPage", dataQuery.page);
+
+    const url = `https://search.torre.co/opportunities/_search/?currency=USD%24&page=${
+      dataQuery.page
+    }&periodicity=hourly&lang=${
+      dataQuery.language
+    }&size=10&aggregate=false&offset=${(dataQuery.page - 1) * 10}`;
     try {
       context.commit("setStartProcessing", null, { root: true });
       const { data } = await Vue.http.post(url, {
@@ -55,16 +73,17 @@ export default class extends VuexModule {
         },
       });
       context.commit("setJobs", data);
-      context.commit("setJobsPage", dataQuery.page);
+      context.commit("setPage", dataQuery.page);
     } catch (error) {
       context.commit("setJobs", {} as jobsResultsInterface);
-      context.commit("setJobsPage", 0);
+      context.commit("setPage", 1);
       // throw error;
       console.log("Error searching jobs: ", error);
     } finally {
       context.commit("setStopProcessing", null, { root: true });
     }
   }
+
   @Action({ useContext: true })
   async fetchJobsDetail(
     context: ActionContext<any, any>,
@@ -84,5 +103,22 @@ export default class extends VuexModule {
     } finally {
       context.commit("setStopProcessing", null, { root: true });
     }
+  }
+
+  @Action({ commit: "setJobSearchText" })
+  changeSearchText(value: string): string {
+    return value;
+  }
+
+  @Action({ commit: "setPage" })
+  changePage(value: number): number {
+    return value;
+  }
+
+  @Action({ useContext: true })
+  clearSearch(context: ActionContext<any, any>, value: number): void {
+    context.commit("setJobs", {} as jobsResultsInterface);
+    context.commit("setSearchText", "");
+    context.commit("setPage", 1);
   }
 }

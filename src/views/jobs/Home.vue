@@ -19,17 +19,22 @@
         v-bind:key="job.id"
         class="mx-auto mb-12"
       >
-        <div class="d-flex flex-no-wrap justify-space-between">
+        <div class="d-flex flex-no-wrap justify-space-between" :id="job.id">
           <div>
             <v-card-title>{{ job.objective }}</v-card-title>
             <v-card-text>
               <div class="my-4 subtitle-1">
-                $ {{ job.compensantion || $t("template.toBeDefined") }} •
+                {{
+                  job.compensation && job.compensation.data
+                    ? getCompensation(job.compensation.data)
+                    : $t("template.toBeDefined")
+                }}
+                •
                 {{ job.locations.toString() }}
               </div>
             </v-card-text>
             <v-divider class="mx-4"></v-divider>
-            <v-card-title>{{ $t("template.experiences")}}</v-card-title>
+            <v-card-title>{{ $t("template.experiences") }}</v-card-title>
 
             <v-card-text>
               <v-chip-group column>
@@ -43,7 +48,14 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text :to="`jobs/${job.id}`">
+              <v-btn
+                color="deep-purple lighten-2"
+                text
+                :to="{
+                  name: 'JobsDetail',
+                  params: { id: job.id, pageTitle: job.objective }
+                }"
+              >
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
             </v-card-actions>
@@ -89,6 +101,7 @@ import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination";
 
 import { jobsResultsInterface } from "@/interfaces/jobs";
+import helpers from "@/helpers";
 
 @Component({
   components: {
@@ -110,10 +123,7 @@ export default class Home extends Vue {
   getProcessing?: boolean;
 
   @MapAction()
-  stopLoading: any;
-
-  @MapGetter({ namespace: "jobs" })
-  getJobs?: jobsResultsInterface;
+  stopLoading?: any;
 
   @MapGetter({ namespace: "jobs" })
   getSearchText?: string;
@@ -121,8 +131,11 @@ export default class Home extends Vue {
   @MapGetter({ namespace: "jobs" })
   getPage?: number;
 
+  @MapGetter({ namespace: "jobs" })
+  getJobs?: jobsResultsInterface;
+
   @MapAction({ namespace: "jobs" })
-  fetchJobs: any;
+  fetchJobs?: any;
 
   @MapAction({ namespace: "jobs" })
   clearSearch?: any;
@@ -142,10 +155,6 @@ export default class Home extends Vue {
     });
   }
 
-  cancelForm(resp: any) {
-    this.show = false;
-  }
-
   changePage(value: number): void {
     this.searchText = this.getSearchText;
     this.fetchJobs({
@@ -153,6 +162,16 @@ export default class Home extends Vue {
       page: value,
       language: this.getLanguage
     });
+  }
+  getCompensation(compensation: any): string {
+    const ret = this.$t("template.toBeDefined").toString();
+
+    const response = helpers.getCompensation(
+      compensation,
+      this.$t("template." + compensation.periodicity).toString()
+    );
+
+    return response === "" ? ret : response;
   }
 
   get jobListing(): unknown[] {

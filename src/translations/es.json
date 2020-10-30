@@ -20,13 +20,27 @@
     "career-path": "Trayectoria profesional",
     "organizations": "Organizaciones",
     "team-structure": "Estructura de equipo",
-    "additional": "Adicional"
+    "additional": "Adicional",
+    "team-culture": "Cultura de equipo",
+    "challenges": "Retos",
+    "compensation": "Compensación",
+    "yearly": "Anual",
+    "monthly": "Mensual",
+    "hourly": "Hora",
+    "deadline": "Fecha limite",
+    "applyJobText": "Esta es una demostración en Vue: debe ir al sitio web de torre.co para postularse. ¿Quieres acceder a torre.co?",
+    "currentSkills": "Habilidades actuales",
+    "moreSkills": "Mostrar todas",
+    "lessSkills": "Mostrar menos"
   },
   "navigation": {
     "jobSearch": "Buscar ofertas laborales",
     "peopleSearch" : "Buscar personas",
     "seeDetails": "Ver detalles",
-    "goBack": "Regresar"
+    "goBack": "Regresar",
+    "quickApply": "Aplicar",
+    "close": "Cerrar",
+    "proceed": "Ir al sitio"
   },
   "forms":{
     "jobSearch": "Buscar trabajos",

@@ -20,13 +20,27 @@
     "career-path": "Parcours professionnel",
     "organizations": "Organisations",
     "team-structure": "Structure d'équipe",
-    "additional": "Additionnel"
+    "additional": "Additionnel",
+    "team-culture": "Culture d'équipe",
+    "challenges": "Défis",
+    "compensation": "Compensation",
+    "yearly": "Annuel",
+    "monthly": "Mensuel",
+    "hourly": "Heure",
+    "deadline": "Date limite",
+    "applyJobText": "Ceci est une démo en Vuejs seulement: vous devez vous rendre au site torre.co pour postuler. Voulez-vous accéder à torre.co?",
+    "currentSkills": "Compétences actuelles",
+    "moreSkills": "Montrer toutes les compétences",
+    "lessSkills": "Montrar moins"
   },
   "navigation": {
     "jobSearch": "Rechercher des offres d'emploi",
     "peopleSearch" : "Recherche des personnes",
     "seeDetails": "Voir plus de details",
-    "goBack": "Retourner"
+    "goBack": "Retourner",
+    "quickApply": "Apliquer",
+    "close": "Fermer",
+    "proceed": "Aller au site"
   },
   "forms":{
     "jobSearch": "Chercher un emploi",

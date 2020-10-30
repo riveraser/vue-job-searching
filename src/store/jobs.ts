@@ -73,7 +73,6 @@ export default class extends VuexModule {
         }
       });
       context.commit("setJobs", data);
-      context.commit("setPage", dataQuery.page);
     } catch (error) {
       context.commit("setJobs", {} as jobsResultsInterface);
       context.commit("setPage", 1);
@@ -105,7 +104,7 @@ export default class extends VuexModule {
     }
   }
 
-  @Action({ commit: "setJobSearchText" })
+  @Action({ commit: "setSearchText" })
   changeSearchText(value: string): string {
     return value;
   }

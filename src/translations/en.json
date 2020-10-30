@@ -20,13 +20,27 @@
     "career-path": "Carreer Path",
     "organizations": "Organizations",
     "team-structure": "Team Structure",
-    "additional": "Additional"
+    "additional": "Additional",
+    "team-culture": "Team culture",
+    "challenges": "Challenges",
+    "compensation": "Compensation",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "hourly": "Hourly",
+    "deadline": "Deadline",
+    "applyJobText": "This is a Vue demo only: you need to go to torre.co website in order to apply. Do you want to proceed to torre.co?",
+    "currentSkills": "Current Skills",
+    "moreSkills": "Show all skills",
+    "lessSkills": "Less skills"
   },
   "navigation": {
     "jobSearch": "Job Search",
     "peopleSearch": "People Search",
     "seeDetails": "See details",
-    "goBack": "Go Back"
+    "goBack": "Go Back",
+    "quickApply": "Quick Apply",
+    "close": "Close",
+    "proceed": "Ok proceed"
   },
   "forms": {
     "jobSearch": "Search Jobs",

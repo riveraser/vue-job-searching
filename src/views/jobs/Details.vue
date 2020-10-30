@@ -9,16 +9,26 @@
       offset-lg="2"
       offset-xl="3"
     >
-      <GoBackBtn class="mb-2"></GoBackBtn>
-      <v-sheet rounded="lg" class="px-5 py-4">
-        <h1>{{ jobDetail.objective }}</h1>
-        <h6>{{ detailId }}</h6>
+      <v-row>
+        <v-col>
+          <GoBackBtn></GoBackBtn>
+        </v-col>
+        <v-col class="text-right">
+          <v-btn text depressed small color="blue" @click="sheet = !sheet">
+            {{ $t("navigation.quickApply") }}
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-sheet v-if="isProcessing" rounded="lg" class="px-5 py-4">
         <v-skeleton-loader
           class="mx-auto"
           type="article, actions, list-item-two-line, table-tfoot"
-          v-if="isProcessing"
         ></v-skeleton-loader>
-        <v-card v-else class="mx-auto" flat tile>
+      </v-sheet>
+      <v-sheet v-else rounded="lg" class="px-5 py-4">
+        <h1>{{ jobDetail.objective }}</h1>
+        <v-card class="mx-auto" flat tile>
           <v-img
             :src="
               jobDetail.attachments &&
@@ -69,8 +79,23 @@
               </v-col>
             </v-row>
           </v-img>
+          <v-divider></v-divider>
           <v-card-text>
-            <h3>{{ $t("template.experiences") }}</h3>
+            <h3>
+              <span class="text--primary"
+                >{{ $t("template.compensation") }}:
+              </span>
+              <span class="subtitle-1"> {{ getCompensation }} </span>
+              -
+              <span class="text--primary"> {{ $t("template.deadline") }} </span>
+              <span class="subtitle-1">
+                {{ jobDetail.deadline | formatDate }}
+              </span>
+            </h3>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-text>
+            <h3 class="text--primary">{{ $t("template.experiences") }}</h3>
             <v-chip-group column>
               <v-chip
                 v-for="skill in jobDetail.strengths"
@@ -79,17 +104,48 @@
               </v-chip>
             </v-chip-group>
           </v-card-text>
+          <v-divider></v-divider>
           <v-card-text>
-            <h3>{{ $t("template.description") }}</h3>
-            <div v-for="(value, name, index) in detailedDescription" v-bind:key="index" class="mt-4" >
-                
-                <h4>{{$t(`template.${name}`)}}</h4>
-                <p v-for=" (v, indexv) in value" v-bind:key="index-indexv" >
-                    - {{v.content}}
-                </p>
-            
+            <h3 class="text--primary">{{ $t("template.description") }}</h3>
+            <div
+              v-for="(value, name, index) in detailedDescription"
+              v-bind:key="index"
+              class="mt-4"
+            >
+              <h4>{{ $t(`template.${name}`) }}</h4>
+              <p v-for="(v, indexv) in value" v-bind:key="index - indexv">
+                - {{ v.content }}
+              </p>
             </div>
           </v-card-text>
+          <v-card-actions>
+            <div class="text-center">
+              <v-btn color="blue" dark @click="sheet = !sheet">
+                {{ $t("navigation.quickApply") }}
+              </v-btn>
+              <v-bottom-sheet v-model="sheet">
+                <v-sheet class="text-center" height="200px">
+                  <v-btn class="mt-6" text color="red" @click="sheet = !sheet">
+                    {{ $t("navigation.close") }}
+                  </v-btn>
+                  <div class="py-3">
+                    {{ $t("template.applyJobText") }}
+                  </div>
+                  <v-btn
+                    class="mb-6"
+                    text
+                    color="primary"
+                    :href="
+                      `https://torre.co/en/jobs/${jobDetail.id}-${jobDetail.slug}`
+                    "
+                    target="_blank"
+                  >
+                    {{ $t("navigation.proceed") }}
+                  </v-btn>
+                </v-sheet>
+              </v-bottom-sheet>
+            </div>
+          </v-card-actions>
         </v-card>
       </v-sheet>
     </v-col>
@@ -97,17 +153,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, MapAction, MapGetter } from "types-vue";
+import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
 import GoBackBtn from "@/components/GoBackBtn.vue";
 import _GroupBy from "lodash/groupBy";
+import helpers from "@/helpers";
 
 @Component({
   components: {
-    GoBackBtn,
-  },
+    GoBackBtn
+  }
 })
 export default class Home extends Vue {
   private detailId?: string = "";
+  private sheet?: boolean = false;
 
   @MapGetter()
   getProcessing?: boolean;
@@ -128,7 +186,7 @@ export default class Home extends Vue {
   mounted() {
     this.stopLoading();
   }
-
+  
   get getLocation(): string {
     const place = this.jobDetail.place;
     let locations = "";
@@ -149,6 +207,19 @@ export default class Home extends Vue {
       locations = " - ";
     }
     return locations;
+  }
+
+  get getCompensation(): string {
+    const compensation = this.jobDetail.compensation;
+    const ret = this.$t("template.toBeDefined").toString();
+    let response = "";
+    if (compensation) {
+      response = helpers.getCompensation(
+        compensation,
+        this.$t("template." + compensation.periodicity).toString()
+      );
+    }
+    return response === "" ? ret : response;
   }
 
   get jobDetail() {

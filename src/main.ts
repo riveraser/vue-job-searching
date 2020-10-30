@@ -8,6 +8,8 @@ import vuetify from './plugins/vuetify';
 import i18n from './plugins/vue-I18n';
 require("./plugins/http"); // Must be a require
 
+require("./filters"); // Must be a require
+
 Vue.config.productionTip = false; 
 
 new Vue({

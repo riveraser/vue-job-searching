@@ -1,11 +1,14 @@
 <template>
-  <v-row>
+  <v-row id="top-page" >
     <SearchForm
       :search.sync="searchText"
       :label="$t('forms.peopleSearch')"
       :resultText="resultText"
+      :showReset="totalPages > 0 ? true : false"
       @do-search="searchPeople"
+      @reset-form="clearSearch"
     ></SearchForm>
+
     <v-col cols="12" md="8" lg="9">
       <v-card
         v-for="people in peopleListing"
@@ -26,7 +29,7 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-title>Skills</v-card-title>
+            <v-card-title>{{$t("template.currentSkills")}}</v-card-title>
 
             <v-card-text>
               <v-chip-group column>
@@ -40,13 +43,10 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn
-                color="deep-purple lighten-2"
-                text
-                @click="showDetail(people.username)"
-              >
+              <v-btn color="deep-purple lighten-2" text :to="{ name: 'PeopleDetail', params: { id: people.username, pageTitle: people.name} }">
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
+              
             </v-card-actions>
           </div>
           <div>
@@ -62,62 +62,29 @@
           </div>
         </div>
       </v-card>
-      <v-pagination
+      <Pagination
         v-if="peopleListing.length > 0"
-        v-model="currentPage"
-        :length="totalPages"
-        circle
-        total-visible="10"
-        :disabled="isProcessing"
-      ></v-pagination>
+        :totalPages="totalPages"
+        :isProcessing="isProcessing"
+        :currentPage.sync="currentPage"
+        @page-change="changePage"
+      ></Pagination>
     </v-col>
-    <DialogInfo :show.sync="show" @change-state="cancelForm($event)">
-      <template v-slot:header>
-        {{ $t("template.details") }} - {{ peopleInfo.objective }}
-      </template>
-
-      <p class="mt-2"></p>
-      <div>
-        <h2>Mas informacion aqui si hay tiempo agregar mas detalles</h2>
-      </div>
-      <div>
-        <h4>Details:</h4>
-        <p v-for="detail in peopleInfo.details" v-bind:key="detail.code">
-          {{ detail.content }}
-        </p>
-      </div>
-      <div>
-        <h3>Strengths</h3>
-        <v-chip-group column>
-          <v-chip
-            v-for="strength in peopleInfo.strengths"
-            v-bind:key="strength.code"
-          >
-            {{ strength.name }} - {{ strength.experience }}
-          </v-chip>
-        </v-chip-group>
-      </div>
-
-      <template v-slot:actions>
-        <v-spacer></v-spacer>
-        <v-btn depressed outlined @click="cancelForm(false)" color="primary"
-          >Ok</v-btn
-        >
-      </template>
-    </DialogInfo>
   </v-row>
 </template>
 
 <script lang="ts">
 import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
 import SearchForm from "@/components/SearchForm";
-import DialogInfo from "@/components/DialogInfo";
-import { jobsResultsInterface } from "@/interfaces/jobs";
+import Pagination from "@/components/Pagination";
+
+import { peopleResultsInterface } from "@/interfaces/people";
+import helpers from "@/helpers";
 
 @Component({
   components: {
     SearchForm,
-    DialogInfo
+    Pagination
   }
 })
 export default class Home extends Vue {
@@ -137,44 +104,43 @@ export default class Home extends Vue {
   stopLoading?: any;
 
   @MapGetter({ namespace: "people" })
-  getPeople?: jobsResultsInterface;
+  getSearchText?: string;
 
   @MapGetter({ namespace: "people" })
-  getPeopleDetail?: any;
+  getPage?: number;
+
+  @MapGetter({ namespace: "people" })
+  getPeople?: peopleResultsInterface;
 
   @MapAction({ namespace: "people" })
   fetchPeople?: any;
 
   @MapAction({ namespace: "people" })
-  fetchPeopleDetail?: any;
-
-  @MapAction({ namespace: "people" })
-  getPeoplePage?: number;
+  clearSearch?: any;
 
   mounted() {
     this.stopLoading();
+    this.searchText = this.getSearchText;
+    this.currentPage = this.getPage;
   }
 
   searchPeople() {
     this.currentPage = 1;
     this.fetchPeople({
       search: this.searchText?.trim(),
-      page: this.currentPage - 1,
+      page: this.currentPage,
       language: this.getLanguage
     });
     this.tempSearch = this.searchText;
   }
 
-  async showDetail(id: string) {
-    this.peopleInfo = { strengths: [] };
-    await this.fetchPeopleDetail(id);
-    if (this.getPeopleDetail) {
-      this.peopleInfo = this.getPeopleDetail;
-      this.show = true;
-    }
-  }
-  cancelForm(resp: any) {
-    this.show = false;
+  changePage(value: number): void {
+    this.searchText = this.getSearchText;
+    this.fetchPeople({
+      search: this.searchText?.trim(),
+      page: value,
+      language: this.getLanguage
+    });
   }
 
   getAvatarChars(name: string): string {
@@ -191,16 +157,6 @@ export default class Home extends Vue {
         ret = arrTempo[0].slice(0, 1) + "" + arrTempo[2].slice(0, 1);
     }
     return ret.toUpperCase();
-  }
-
-  @Watch("currentPage")
-  onPageChanged(value: number): void {
-    this.searchText = this.tempSearch;
-    this.fetchPeople({
-      search: this.searchText?.trim(),
-      page: value - 1,
-      language: this.getLanguage
-    });
   }
 
   get peopleListing(): unknown[] {

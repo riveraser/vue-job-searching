@@ -5,18 +5,26 @@
     "privacyPolicy": "Privacy Policy",
     "welcome": "Welcome",
     "optional": "- Optional  &nbsp;",
-    "details": "Details"
+    "details": "Details",
+    "searchEmptyMessage": "Please enter a keyword to search",
+    "toBeDefined": "To Be Defined",
+    "anywhere": "Anywhere",
+    "remote": "Remote",
+    "experiences": "Experiences",
+    "description": "Job Description"
   },
   "navigation": {
     "jobSearch": "Job Search",
     "peopleSearch" : "People Search",
-    "seeDetails": "See details"
+    "seeDetails": "See details",
+    "goBack": "Go Back"
   },
   "forms":{
     "jobSearch": "Search Jobs",
     "peopleSearch": "Search for people",
     "search": "Search",
     "results": "We found [QTY] results for your search",
+    "resetResults": "Clear the results",
     "searchError":{
       "enterText": "Search is required",
       "maxText": "Must not be more than 30 chars long",

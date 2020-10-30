@@ -40,7 +40,11 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text @click="showDetail(people.username)" >
+              <v-btn
+                color="deep-purple lighten-2"
+                text
+                @click="showDetail(people.username)"
+              >
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
             </v-card-actions>
@@ -130,7 +134,7 @@ export default class Home extends Vue {
   getProcessing?: boolean;
 
   @MapAction()
-  stopLoading: any;
+  stopLoading?: any;
 
   @MapGetter({ namespace: "people" })
   getPeople?: jobsResultsInterface;
@@ -146,7 +150,7 @@ export default class Home extends Vue {
 
   @MapAction({ namespace: "people" })
   getPeoplePage?: number;
-  
+
   mounted() {
     this.stopLoading();
   }

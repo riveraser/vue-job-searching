@@ -5,18 +5,26 @@
     "privacyPolicy": "Politique de confidentialité",
     "welcome": "Bienvenue",
     "optional": "- Optionnel  &nbsp;",
-    "details": "Detaille"
+    "details": "Detaille",
+    "searchEmptyMessage": "Entrez un mot-clé pour realiser une recherche",
+    "toBeDefined": "À définir",
+    "anywhere": "N'importe où",
+    "remote": "En mode télétravail",
+    "experiences": "Experiences",
+    "description": "Description du poste"
   },
   "navigation": {
     "jobSearch": "Rechercher des offres d'emploi",
     "peopleSearch" : "Recherche des personnes",
-    "seeDetails": "Voir plus de details"
+    "seeDetails": "Voir plus de details",
+    "goBack": "Retourner"
   },
   "forms":{
     "jobSearch": "Chercher un emploi",
     "peopleSearch": "Chercher des personnes",
     "search": "Rechercher",
     "results": "On a trouvé [QTY] résultats",
+    "resetResults": "Effacer les résultats",
     "searchError":{
       "enterText": "Vous devez especifier une rechercher",
       "maxText": "Un maximum de 30 lettres es requis",

@@ -16,7 +16,7 @@
     <template v-slot:extension class="flex-column">
       <div>
         <v-btn-toggle active-class="selected-menu" borderless dense tile group>
-          <v-btn class="ma-0" value="left" to="/">
+          <v-btn class="ma-0" value="left" to="/jobs">
             <span class="font-weight-light">{{
               $t("navigation.jobSearch")
             }}</span>
@@ -51,15 +51,11 @@ import LanguageSelector from "./LanguageSelector.vue";
   }
 })
 export default class Header extends Vue {
-
   @MapGetter()
   getProcessing: string | undefined;
 
   @MapGetter()
   getLoading: string | undefined;
-  
-
-
 }
 </script>
 <style lang="less">
@@ -71,9 +67,9 @@ export default class Header extends Vue {
   flex-direction: row;
   flex-direction: column;
   align-items: flex-start !important;
-  padding: 0!important;
+  padding: 0 !important;
 
-  .progress-bar{
+  .progress-bar {
     width: 100%;
   }
 }

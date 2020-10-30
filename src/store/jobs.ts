@@ -8,7 +8,7 @@ import { jobsResultsInterface } from "@/interfaces/jobs";
 export default class extends VuexModule {
   _jobs: jobsResultsInterface = {} as jobsResultsInterface;
   _page?: number = 1;
-  _jobsDetail: any;
+  _jobsDetail?: any = {};
   _searchText?: string = "";
 
   @Getter()
@@ -17,7 +17,7 @@ export default class extends VuexModule {
   }
 
   @Getter()
-  getJobsDetail(): jobsResultsInterface {
+  getJobsDetail(): any {
     return this._jobsDetail;
   }
 
@@ -69,8 +69,8 @@ export default class extends VuexModule {
       const { data } = await Vue.http.post(url, {
         "skill/role": {
           text: dataQuery.search,
-          experience: "potential-to-develop",
-        },
+          experience: "potential-to-develop"
+        }
       });
       context.commit("setJobs", data);
       context.commit("setPage", dataQuery.page);

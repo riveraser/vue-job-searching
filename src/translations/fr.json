@@ -10,8 +10,17 @@
     "toBeDefined": "À définir",
     "anywhere": "N'importe où",
     "remote": "En mode télétravail",
-    "experiences": "Experiences",
-    "description": "Description du poste"
+    "experiences": "Expériences",
+    "description": "Description du poste",
+    "benefits": "Avantages",
+    "stock-compensations": "Compensations d'achat d'actions",
+    "reason": "Les raisons",
+    "responsibilities": "Responsabilités",
+    "requirements": "Exigences",
+    "career-path": "Parcours professionnel",
+    "organizations": "Organisations",
+    "team-structure": "Structure d'équipe",
+    "additional": "Additionnel"
   },
   "navigation": {
     "jobSearch": "Rechercher des offres d'emploi",

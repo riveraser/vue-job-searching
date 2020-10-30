@@ -11,7 +11,16 @@
     "anywhere": "Desde cualquier lugar",
     "remote": "Remoto",
     "experiences": "Experiencias",
-    "description": "Descripción del puesto"
+    "description": "Descripción del puesto",
+    "benefits": "Beneficios",
+    "stock-compensations": "Compensaciones de stock",
+    "reason": "Razón",
+    "responsibilities": "Responsibilidades",
+    "requirements": "Requerimientos",
+    "career-path": "Trayectoria profesional",
+    "organizations": "Organizaciones",
+    "team-structure": "Estructura de equipo",
+    "additional": "Adicional"
   },
   "navigation": {
     "jobSearch": "Buscar ofertas laborales",

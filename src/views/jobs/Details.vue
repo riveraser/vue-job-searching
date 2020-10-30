@@ -81,7 +81,14 @@
           </v-card-text>
           <v-card-text>
             <h3>{{ $t("template.description") }}</h3>
-            {{ detailedDescription }}
+            <div v-for="(value, name, index) in detailedDescription" v-bind:key="index" class="mt-4" >
+                
+                <h4>{{$t(`template.${name}`)}}</h4>
+                <p v-for=" (v, indexv) in value" v-bind:key="index-indexv" >
+                    - {{v.content}}
+                </p>
+            
+            </div>
           </v-card-text>
         </v-card>
       </v-sheet>

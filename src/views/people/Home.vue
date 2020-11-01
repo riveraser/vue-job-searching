@@ -8,8 +8,12 @@
       @do-search="searchPeople"
       @reset-form="clearSearch"
     ></SearchForm>
-
-    <v-col cols="12" md="8" lg="9">
+    <v-col cols="12" md="8" lg="9" v-if="totalPages === 0">
+      <v-sheet rounded="lg" class="px-5 py-4">
+        {{ $t("template.searchEmptyMessage") }}
+      </v-sheet>
+    </v-col>
+    <v-col v-else cols="12" md="8" lg="9">
       <v-card
         v-for="people in peopleListing"
         v-bind:key="people.username"

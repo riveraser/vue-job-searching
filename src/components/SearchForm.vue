@@ -17,6 +17,8 @@
           :label="label"
           required
           clearable
+          v-on:keydown.enter.prevent="validate"
+          autocomplete="off"
         ></v-text-field>
         <v-btn
           :disabled="!valid || isProcessing"
@@ -24,10 +26,21 @@
           class="mr-4 my-4"
           @click="validate"
           :loading="isProcessing"
-          v-on:keydown.enter.prevent="validate"
+          small
         >
           {{ $t("forms.search") }}
         </v-btn>
+        <v-btn
+          :disabled="!showReset"
+          color="primary"
+          class="mr-4 my-4"
+          @click="resetForm"
+          outlined
+          small
+        >
+          {{ $t("forms.resetResults") }}
+        </v-btn>
+
         <div class="caption">
           {{ resultText }}
         </div>
@@ -39,7 +52,6 @@
 <script lang="ts">
 import { Vue, Component, MapGetter, Prop } from "types-vue";
 
-//import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
 export default class SearchForm extends Vue {
@@ -55,9 +67,15 @@ export default class SearchForm extends Vue {
   label?: string;
   @Prop()
   resultText?: string;
+  @Prop()
+  showReset?: boolean;
 
   @MapGetter()
   getProcessing?: boolean;
+
+  mounted() {
+    this.valid = false;
+  }
 
   validate() {
     this.$refs.form.validate();
@@ -66,8 +84,11 @@ export default class SearchForm extends Vue {
     }
   }
 
-  mounted() {
-    this.valid = false;
+  resetForm() {
+    this.$emit("reset-form");
+    this.$refs.form.reset();
+    this.searchWord = "";
+    this.$emit("update:search", "");
   }
 
   get searchWord() {

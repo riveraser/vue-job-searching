@@ -5,22 +5,65 @@
     "privacyPolicy": "Privacy Policy",
     "welcome": "Welcome",
     "optional": "- Optional  &nbsp;",
-    "details": "Details"
+    "details": "Details",
+    "searchEmptyMessage": "Please enter a keyword to search",
+    "toBeDefined": "To Be Defined",
+    "anywhere": "Anywhere",
+    "remote": "Remote",
+    "experiences": "Experiences",
+    "description": "Job Description",
+    "benefits": "Benefits",
+    "stock-compensations": "Stock compensations",
+    "reason": "Reasons",
+    "responsibilities": "Responsibilities",
+    "requirements": "Requirements",
+    "career-path": "Carreer Path",
+    "organizations": "Organizations",
+    "team-structure": "Team Structure",
+    "additional": "Additional",
+    "team-culture": "Team culture",
+    "challenges": "Challenges",
+    "compensation": "Compensation",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "hourly": "Hourly",
+    "deadline": "Deadline",
+    "applyJobText": "This is a Vue demo only: you need to go to torre.co website in order to apply. Do you want to proceed to torre.co?",
+    "currentSkills": "Current Skills",
+    "moreSkills": "Show all skills",
+    "lessSkills": "Less skills",
+    "noData": "Not set",
+    "privateData": "Private data",
+    "languages": "Languages",
+    "jobs": "Jobs",
+    "education": "Education",
+    "to": "To",
+    "current": "Current",
+    "fullTimeEmployment": "Full-time and/or or part-time employment",
+    "freelanceGigs": "Freelance gigs"
   },
   "navigation": {
     "jobSearch": "Job Search",
-    "peopleSearch" : "People Search",
-    "seeDetails": "See details"
+    "peopleSearch": "People Search",
+    "seeDetails": "See details",
+    "goBack": "Go Back",
+    "quickApply": "Quick Apply",
+    "close": "Close",
+    "proceed": "Ok proceed",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "contactUser": "Contact user"
   },
-  "forms":{
+  "forms": {
     "jobSearch": "Search Jobs",
     "peopleSearch": "Search for people",
     "search": "Search",
     "results": "We found [QTY] results for your search",
-    "searchError":{
+    "resetResults": "Clear the results",
+    "searchError": {
       "enterText": "Search is required",
       "maxText": "Must not be more than 30 chars long",
-      "notFound" : "Your search did not found any matches"
+      "notFound": "Your search did not found any matches"
     }
   }
 }

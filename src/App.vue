@@ -13,20 +13,36 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { Vue, Component, MapAction, MapGetter } from "types-vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 
-export default Vue.extend({
-  name: "App",
-
+@Component({
   components: {
     Header,
     Footer
-  },
+  }
+})
+export default class App extends Vue {
+  
+  @MapAction()
+  changeWindowSize?: any;
 
-  data: () => ({
-    //
-  })
-});
+  mounted() {
+    // Initial Size
+    this.changeWindowSize({
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
+
+    // general listener to check when the document size changes
+    window.addEventListener("resize", this.onWindowResize, true);
+  }
+  onWindowResize(): void {
+    this.changeWindowSize({
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
+  }
+}
 </script>

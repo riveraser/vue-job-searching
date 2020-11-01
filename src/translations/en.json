@@ -32,7 +32,15 @@
     "currentSkills": "Current Skills",
     "moreSkills": "Show all skills",
     "lessSkills": "Less skills",
-    "noData": "Not set"
+    "noData": "Not set",
+    "privateData": "Private data",
+    "languages": "Languages",
+    "jobs": "Jobs",
+    "education": "Education",
+    "to": "To",
+    "current": "Current",
+    "fullTimeEmployment": "Full-time and/or or part-time employment",
+    "freelanceGigs": "Freelance gigs"
   },
   "navigation": {
     "jobSearch": "Job Search",
@@ -43,7 +51,8 @@
     "close": "Close",
     "proceed": "Ok proceed",
     "showMore": "Show more",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "contactUser": "Contact user"
   },
   "forms": {
     "jobSearch": "Search Jobs",

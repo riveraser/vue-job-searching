@@ -186,7 +186,7 @@ export default class Home extends Vue {
   mounted() {
     this.stopLoading();
   }
-  
+
   get getLocation(): string {
     const place = this.jobDetail.place;
     let locations = "";
@@ -231,6 +231,14 @@ export default class Home extends Vue {
   get detailedDescription() {
     const details = this.jobDetail.details;
     return _GroupBy(details, "code");
+  }
+
+  // Wills set the new title if we are refreshing the page
+  @Watch("getJobsDetail")
+  onDataChanged(value: any): void {
+    if (document.title.indexOf(this.getJobsDetail.objective) < 0) {
+      document.title += " " + this.getJobsDetail.objective;
+    }
   }
 }
 </script>

@@ -9,7 +9,11 @@ export default new Vuex.Store({
   state: {
     language: "en",
     processing: false,
-    loading: false
+    loading: false,
+    windowSize: {
+      height: 0,
+      width:0
+    }
   },
   getters: {
     getLanguage(state): string {
@@ -19,35 +23,42 @@ export default new Vuex.Store({
         return state.language;
       }
     },
-    getProcessing: (state) => state.processing,
-    getLoading: (state) => state.loading,
+    getProcessing: (state): boolean => state.processing,
+    getLoading: (state): boolean => state.loading,
+    getWindowSize: (state): any => state.windowSize
   },
   mutations: {
     setLanguage(state, lang): void {
       state.language = lang;
       localStorage.language = lang;
     },
-    setStartProcessing(state) {
+    setWindowSize(state, newSize): void {
+      state.windowSize = newSize;
+    },
+    setStartProcessing(state): void {
       state.processing = true;
     },
-    setStopProcessing(state) {
+    setStopProcessing(state): void {
       state.processing = false;
     },
-    setStartLoading(state){
+    setStartLoading(state): void{
       state.loading = true;
     },
-    setStopLoading(state){
+    setStopLoading(state): void{
       state.loading = false;
     }
   },
   actions: {
-    changeLanguage(context, lang) {
+    changeLanguage(context, lang): void {
       context.commit("setLanguage", lang);
     },
-    stopProcessing(context){
+    changeWindowSize(context, newSize): void {
+      context.commit("setWindowSize", newSize);
+    },
+    stopProcessing(context): void{
       context.commit("setStopProcessing");
     },
-    stopLoading(context){
+    stopLoading(context): void{
       context.commit("setStopLoading");
     }
   },

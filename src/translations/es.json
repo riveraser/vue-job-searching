@@ -32,7 +32,15 @@
     "currentSkills": "Habilidades actuales",
     "moreSkills": "Mostrar todas",
     "lessSkills": "Mostrar menos",
-    "noData": "Sin datos"
+    "noData": "Sin datos",
+    "privateData": "Datos privados",
+    "languages": "Idiomas",
+    "jobs": "Trabajos",
+    "education": "Educación",
+    "to": "a",
+    "current": "Actual",
+    "fullTimeEmployment": "Trabajo a tiempo completo o medio tiempo",
+    "freelanceGigs": "En proyectos Freelance"
   },
   "navigation": {
     "jobSearch": "Buscar ofertas laborales",
@@ -43,7 +51,8 @@
     "close": "Cerrar",
     "proceed": "Ir al sitio",
     "showMore": "Mostrar más",
-    "showLess": "Mostrar menos"
+    "showLess": "Mostrar menos",
+    "contactUser": "Contactar al usuario"
   },
   "forms":{
     "jobSearch": "Buscar trabajos",

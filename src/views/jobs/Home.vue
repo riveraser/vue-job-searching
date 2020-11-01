@@ -37,14 +37,16 @@
             <v-card-title>{{ $t("template.experiences") }}</v-card-title>
 
             <v-card-text>
-              <v-chip-group column>
-                <v-chip
-                  v-for="skill in job.skills"
-                  v-bind:key="`${job.id}-${skill.name}`"
-                >
-                  {{ skill.experience }} - {{ skill.name }}
-                </v-chip>
-              </v-chip-group>
+              <ShowMore :minHeight="88">
+                <v-chip-group column>
+                  <v-chip
+                    v-for="skill in job.skills"
+                    v-bind:key="`${job.id}-${skill.name}`"
+                  >
+                    {{ skill.experience }} - {{ skill.name }}
+                  </v-chip>
+                </v-chip-group>
+              </ShowMore>
             </v-card-text>
 
             <v-card-actions>
@@ -99,6 +101,7 @@
 import { Vue, Component, MapAction, MapGetter } from "types-vue";
 import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination";
+import ShowMore from "@/components/ShowMore";
 
 import { jobsResultsInterface } from "@/interfaces/jobs";
 import helpers from "@/helpers";
@@ -106,7 +109,8 @@ import helpers from "@/helpers";
 @Component({
   components: {
     SearchForm,
-    Pagination
+    Pagination,
+    ShowMore
   }
 })
 export default class Home extends Vue {

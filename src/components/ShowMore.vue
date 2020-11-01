@@ -11,9 +11,7 @@
           x-small
           color="primary"
           @click="isExpanded = !isExpanded"
-          >{{
-            $t(isExpanded ? "navigation.showLess" : "navigation.showMore")
-          }}
+          >{{ $t(isExpanded ? "navigation.showLess" : "navigation.showMore") }}
           <v-icon right dark v-if="isExpanded">
             mdi-arrow-up-bold-circle
           </v-icon>
@@ -23,12 +21,11 @@
         </v-btn>
       </div>
     </v-expand-transition>
-    <resize-observer @notify="onResize" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "types-vue";
+import { Vue, Component, Prop, MapGetter, Watch } from "types-vue";
 
 @Component
 export default class ShowMore extends Vue {
@@ -44,19 +41,26 @@ export default class ShowMore extends Vue {
   })
   minHeight?: number;
 
+  @MapGetter()
+  getWindowSize?: string;
+
   mounted() {
     this.myElement = this.$refs.hiddenContent;
-    this.height = this.myElement.offsetHeight;
-  }
-  onResize(event: any) {
     this.height = this.myElement.offsetHeight;
   }
   getStyle() {
     if (this.height > this.minHeight! && !this.isExpanded) {
       return `height: ${this.minHeight}px; padding-bottom: 10px;`;
     } else {
-      return this.myElement ? `height: ${this.myElement.offsetHeight+20}px`: ``;
+      return this.myElement
+        ? `height: ${this.myElement.offsetHeight + 20}px`
+        : ``;
     }
+  }
+
+  @Watch("getWindowSize")
+  onSizeChanged(value: any): void {
+    this.height = this.myElement.offsetHeight;
   }
 }
 </script>
@@ -68,7 +72,7 @@ export default class ShowMore extends Vue {
   height: auto;
   padding-bottom: 25px;
   transition: height 0.4s ease-in-out;
-  
+
   .show-more-actions {
     position: absolute;
     height: 40px;

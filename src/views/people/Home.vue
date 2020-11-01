@@ -23,8 +23,32 @@
               <h6>{{ people.locationName }}</h6>
             </v-card-title>
             <v-card-text>
-              <div class="my-4 subtitle-1">
+              <div class="subtitle-1">
                 {{ people.professionalHeadline }}
+              </div>
+              <div>
+                {{ $t("template.fullTimeEmployment") }} :
+                <span
+                  v-if="people.compensations && people.compensations.employee"
+                >
+                  <strong>{{ getRate(people.compensations.employee) }} </strong>
+                </span>
+                <span v-else>
+                  <strong>{{ $t("template.noData") }}</strong>
+                </span>
+              </div>
+              <div>
+                {{ $t("template.freelanceGigs") }} :
+                <span
+                  v-if="people.compensations && people.compensations.freelancer"
+                >
+                  <strong>{{
+                    getRate(people.compensations.freelancer)
+                  }}</strong>
+                </span>
+                <span v-else>
+                  <strong>{{ $t("template.noData") }}</strong>
+                </span>
               </div>
             </v-card-text>
 
@@ -32,7 +56,7 @@
             <v-card-title>{{ $t("template.currentSkills") }}</v-card-title>
 
             <v-card-text v-if="people.skills && people.skills.length > 0">
-              <ShowMore :minHeight="88" >
+              <ShowMore :minHeight="88">
                 <v-chip-group column>
                   <v-chip
                     v-for="skill in people.skills"
@@ -46,9 +70,7 @@
                 </v-chip-group>
               </ShowMore>
             </v-card-text>
-            <v-card-text v-else>
-              - {{$t("template.noData")}} - 
-            </v-card-text>
+            <v-card-text v-else> - {{ $t("template.noData") }} - </v-card-text>
 
             <v-card-actions>
               <v-btn
@@ -94,7 +116,7 @@ import Pagination from "@/components/Pagination";
 import ShowMore from "@/components/ShowMore";
 
 import { peopleResultsInterface } from "@/interfaces/people";
-// import helpers from "@/helpers";
+import helpers from "@/helpers";
 
 @Component({
   components: {
@@ -150,6 +172,19 @@ export default class Home extends Vue {
     this.tempSearch = this.searchText;
   }
 
+  getAvatarChars(name: string): string {
+    return helpers.getAvatarChars(name);
+  }
+
+  getRate(data: any): string {
+    return (
+      helpers.toCurrency(data.amount, data.currency) +
+      " / " +
+      this.$t(`template.${data.periodicity}`) +
+      ` (${data.currency.replace("$", "")})`
+    );
+  }
+
   changePage(value: number): void {
     this.searchText = this.getSearchText;
     this.fetchPeople({
@@ -157,22 +192,6 @@ export default class Home extends Vue {
       page: value,
       language: this.getLanguage
     });
-  }
-
-  getAvatarChars(name: string): string {
-    const arrTempo = name.split(" ");
-    let ret;
-    switch (arrTempo.length) {
-      case 1:
-        ret = arrTempo[0].slice(0, 2);
-        break;
-      case 2:
-        ret = arrTempo[0].slice(0, 1) + "" + arrTempo[1].slice(0, 1);
-        break;
-      default:
-        ret = arrTempo[0].slice(0, 1) + "" + arrTempo[2].slice(0, 1);
-    }
-    return ret.toUpperCase();
   }
 
   get peopleListing(): unknown[] {

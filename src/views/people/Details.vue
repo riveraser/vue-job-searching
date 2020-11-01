@@ -14,10 +14,10 @@
           <GoBackBtn></GoBackBtn>
         </v-col>
         <v-col class="text-right">
-          <!-- v-btn text depressed small color="blue" @click="sheet = !sheet">
-            {{ $t("navigation.quickApply") }}
+          <v-btn text depressed small color="blue" @click="sheet = !sheet">
+            {{ $t("navigation.contactUser") }}
             <v-icon>mdi-chevron-right</v-icon>
-          </!-->
+          </v-btn>
         </v-col>
       </v-row>
       <v-sheet v-if="isProcessing" rounded="lg" class="px-5 py-4">
@@ -28,7 +28,7 @@
       </v-sheet>
       <v-sheet v-else rounded="lg" class="px-5 py-4">
         <h1>{{ peopleDetail.objective }}</h1>
-        <v-card class="mx-auto" flat tile>
+        <v-card class="mx-auto" flat>
           <v-img
             :src="
               peopleDetail.person && peopleDetail.person.picture
@@ -86,15 +86,81 @@
                           <v-icon>{{ getLinkIcons(link.name) }}</v-icon>
                         </v-btn>
                       </p>
+                      <span
+                        v-if="
+                          peopleDetail.person && peopleDetail.person.location
+                        "
+                      >
+                        {{ peopleDetail.person.location.name }}
+                      </span>
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </v-col>
             </v-row>
           </v-img>
+          <v-row dense>
+            <v-col cols="12" sm="6">
+              <v-card color="#888890" dark flat>
+                <v-card-title
+                  v-if="
+                    peopleDetail.opportunities &&
+                      peopleDetail.opportunities.length > 0
+                  "
+                  class="headline"
+                >
+                  {{ getJobInterest(peopleDetail.opportunities) }}
+                </v-card-title>
+                <v-card-title v-else class="headline">
+                  {{ $t("template.noData") }}
+                </v-card-title>
+
+                <v-card-subtitle>
+                  {{ $t("template.fullTimeEmployment") }}
+                </v-card-subtitle>
+              </v-card>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-card color="#888890" dark flat>
+                <v-card-title class="headline">
+                  {{ getFreelanceInterest(peopleDetail.opportunities) }}
+                </v-card-title>
+                <v-card-subtitle>
+                  {{ $t("template.freelanceGigs") }}
+                </v-card-subtitle>
+              </v-card>
+            </v-col>
+          </v-row>
           <v-divider></v-divider>
           <v-card-text v-if="peopleDetail.person.summaryOfBio">
-            <p>{{ peopleDetail.person.summaryOfBio }}</p>
+            {{ peopleDetail.person.summaryOfBio }}
+          </v-card-text>
+          <v-card-text>
+            <b>{{ $t("template.languages") }}</b
+            >:
+            <span
+              v-if="peopleDetail.languages && peopleDetail.languages.length > 0"
+            >
+              <v-chip
+                class="ma-2"
+                v-for="language in peopleDetail.languages"
+                v-bind:key="language.code"
+              >
+                <v-avatar left color="white">
+                  <span
+                    :class="
+                      `flag-icon flag-icon-${
+                        language.code === 'en' ? 'gb' : language.code
+                      }`
+                    "
+                  ></span>
+                </v-avatar>
+                {{ language.language }}
+              </v-chip>
+            </span>
+            <span v-else>
+              {{ $t("template.noData") }}
+            </span>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
@@ -121,18 +187,129 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
-            <h3 class="text--primary">{{ $t("template.description") }}</h3>
-            <div class="mt-4">
-              <h4>{{ $t(`template.${name}`) }}</h4>
-              <p>
-                -
-              </p>
-            </div>
+            <v-row>
+              <v-col cols="12" md="6">
+                <h3 class="text--primary">{{ $t("template.jobs") }}</h3>
+                <ShowMore
+                  :minHeight="350"
+                  v-if="peopleDetail.jobs && peopleDetail.jobs.length > 0"
+                >
+                  <v-timeline align-top dense>
+                    <v-timeline-item
+                      v-for="jobs in peopleDetail.jobs"
+                      :key="jobs.id"
+                      large
+                    >
+                      <template v-slot:icon>
+                        <v-avatar
+                          v-if="
+                            jobs.organizations &&
+                              jobs.organizations.length > 0 &&
+                              jobs.organizations[0].picture
+                          "
+                          :title="jobs.organizations[0].name"
+                        >
+                          <img :src="jobs.organizations[0].picture" />
+                        </v-avatar>
+
+                        <v-avatar v-else color="gray">
+                          <strong>{{
+                            getAvatarChars(jobs.organizations[0].name)
+                          }}</strong>
+                        </v-avatar>
+                      </template>
+                      <div>
+                        <div class="font-weight-normal">
+                          {{ jobs.fromYear }} {{ jobs.fromMonth }} -
+                          <span v-if="jobs.toYear || jobs.toMonth"
+                            >{{ jobs.toYear }} {{ jobs.toMonth }}
+                          </span>
+                        </div>
+                        <div>
+                          <h4>{{ jobs.name }}</h4>
+                        </div>
+                        <div
+                          class="caption mb-1"
+                          v-if="
+                            jobs.organizations && jobs.organizations.length > 0
+                          "
+                        >
+                          @{{ jobs.organizations[0].name }}
+                        </div>
+                        <p v-if="jobs.additionalInfo">
+                          {{ jobs.additionalInfo }}
+                        </p>
+                      </div>
+                    </v-timeline-item>
+                  </v-timeline>
+                </ShowMore>
+                <div v-else>- {{ $t("template.noData") }} -</div>
+              </v-col>
+              <v-divider vertical></v-divider>
+              <v-col cols="12" md="5">
+                <h3 class="text--primary">{{ $t("template.education") }}</h3>
+                <ShowMore
+                  :minHeight="350"
+                  v-if="
+                    peopleDetail.education && peopleDetail.education.length > 0
+                  "
+                >
+                  <v-timeline align-top dense>
+                    <v-timeline-item
+                      v-for="education in peopleDetail.education"
+                      :key="education.id"
+                      large
+                    >
+                      <template v-slot:icon>
+                        <v-avatar
+                          v-if="
+                            education.organizations &&
+                              education.organizations.length > 0 &&
+                              education.organizations[0].picture
+                          "
+                          :title="education.organizations[0].name"
+                        >
+                          <img :src="education.organizations[0].picture" />
+                        </v-avatar>
+
+                        <v-avatar v-else color="gray">
+                          <strong>{{
+                            getAvatarChars(education.organizations[0].name)
+                          }}</strong>
+                        </v-avatar>
+                      </template>
+                      <div>
+                        <div class="font-weight-normal">
+                          {{ education.fromYear }} {{ education.fromMonth }} -
+                          <span v-if="education.toYear || education.toMonth"
+                            >{{ education.toYear }} {{ education.toMonth }}
+                          </span>
+                        </div>
+                        <div>
+                          <h4>{{ education.name }}</h4>
+                        </div>
+                        <div
+                          class="caption mb-1"
+                          v-if="
+                            education.organizations &&
+                              education.organizations.length > 0
+                          "
+                        >
+                          @{{ education.organizations[0].name }}
+                        </div>
+                      </div>
+                    </v-timeline-item>
+                  </v-timeline>
+                </ShowMore>
+                <div v-else>- {{ $t("template.noData") }} -</div>
+              </v-col>
+            </v-row>
           </v-card-text>
+
           <v-card-actions>
             <div class="text-center">
               <v-btn color="blue" dark @click="sheet = !sheet">
-                {{ $t("navigation.quickApply") }}
+                {{ $t("navigation.contactUser") }}
               </v-btn>
               <v-bottom-sheet v-model="sheet">
                 <v-sheet class="text-center" height="200px">
@@ -147,7 +324,7 @@
                     text
                     color="primary"
                     :href="
-                      `https://torre.co/en/jobs/${peopleDetail.id}-${peopleDetail.slug}`
+                      `https://bio.torre.co/en/${peopleDetail.person.publicId}`
                     "
                     target="_blank"
                   >
@@ -215,6 +392,48 @@ export default class Home extends Vue {
         return "mdi-link";
     }
   }
+  getAvatarChars(name: string): string {
+    return helpers.getAvatarChars(name);
+  }
+
+  getJobInterest(data: any): any {
+    const jobs = _GroupBy(data, "interest").jobs;
+
+    if (jobs) {
+      const response: any = helpers.getUserJobInterestRate(jobs);
+      if (response.rate === "") {
+        return this.$t(`template.${response.message}`);
+      } else {
+        return (
+          response.rate +
+          " / " +
+          this.$t("template." + response.periodicity).toString() +
+          ` (${response.currency.replace("$", "")})`
+        );
+      }
+    } else {
+      return this.$t("template.noData").toString();
+    }
+  }
+
+  getFreelanceInterest(data: any): any {
+    const jobs = _GroupBy(data, "interest").gigs;
+    if (jobs) {
+      const response: any = helpers.getUserJobInterestRate(jobs);
+      if (response.rate === "") {
+        return this.$t(`template.${response.message}`);
+      } else {
+        return (
+          response.rate +
+          " / " +
+          this.$t("template." + response.periodicity).toString() +
+          ` (${response.currency.replace("$", "")})`
+        );
+      }
+    } else {
+      return this.$t("template.noData").toString();
+    }
+  }
 
   get peopleDetail() {
     return this.getPeopleDetail || {};
@@ -223,10 +442,13 @@ export default class Home extends Vue {
     return this.getProcessing || false;
   }
 
-  /*get detailedDescription() {
-    const details = this.peopleDetail.details;
-    return _GroupBy(details, "code");
-  }*/
+  // Wills set the new title if we are refreshing the page
+  @Watch("getPeopleDetail")
+  onDataChanged(value: any): void {
+    if (document.title.indexOf(this.getPeopleDetail.person.name) < 0) {
+      document.title += " " + this.getPeopleDetail.person.name;
+    }
+  }
 }
 </script>
 <style lang="less">
@@ -259,6 +481,10 @@ export default class Home extends Vue {
   }
   .text-info-header {
     text-align: right;
+    .v-list-item__title,
+    .v-list-item__subtitle {
+      white-space: break-spaces;
+    }
   }
   @media (max-width: 580px) {
     max-height: 100%;

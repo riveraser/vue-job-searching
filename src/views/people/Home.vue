@@ -1,5 +1,5 @@
 <template>
-  <v-row id="top-page" >
+  <v-row id="top-page">
     <SearchForm
       :search.sync="searchText"
       :label="$t('forms.peopleSearch')"
@@ -29,24 +29,38 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-title>{{$t("template.currentSkills")}}</v-card-title>
+            <v-card-title>{{ $t("template.currentSkills") }}</v-card-title>
 
-            <v-card-text>
-              <v-chip-group column>
-                <v-chip v-for="skill in people.skills" v-bind:key="skill.name">
-                  <v-avatar left class="green">
-                    {{ skill.weight }}
-                  </v-avatar>
-                  {{ skill.name }}
-                </v-chip>
-              </v-chip-group>
+            <v-card-text v-if="people.skills && people.skills.length > 0">
+              <ShowMore :minHeight="88" >
+                <v-chip-group column>
+                  <v-chip
+                    v-for="skill in people.skills"
+                    v-bind:key="skill.name"
+                  >
+                    <v-avatar left class="green">
+                      {{ skill.weight }}
+                    </v-avatar>
+                    {{ skill.name }}
+                  </v-chip>
+                </v-chip-group>
+              </ShowMore>
+            </v-card-text>
+            <v-card-text v-else>
+              - {{$t("template.noData")}} - 
             </v-card-text>
 
             <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text :to="{ name: 'PeopleDetail', params: { id: people.username, pageTitle: people.name} }">
+              <v-btn
+                color="deep-purple lighten-2"
+                text
+                :to="{
+                  name: 'PeopleDetail',
+                  params: { id: people.username, pageTitle: people.name }
+                }"
+              >
                 {{ $t("navigation.seeDetails") }}
               </v-btn>
-              
             </v-card-actions>
           </div>
           <div>
@@ -74,17 +88,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
+import { Vue, Component, MapAction, MapGetter } from "types-vue";
 import SearchForm from "@/components/SearchForm";
 import Pagination from "@/components/Pagination";
+import ShowMore from "@/components/ShowMore";
 
 import { peopleResultsInterface } from "@/interfaces/people";
-import helpers from "@/helpers";
+// import helpers from "@/helpers";
 
 @Component({
   components: {
     SearchForm,
-    Pagination
+    Pagination,
+    ShowMore
   }
 })
 export default class Home extends Vue {

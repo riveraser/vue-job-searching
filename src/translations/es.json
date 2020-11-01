@@ -31,7 +31,8 @@
     "applyJobText": "Esta es una demostración en Vue: debe ir al sitio web de torre.co para postularse. ¿Quieres acceder a torre.co?",
     "currentSkills": "Habilidades actuales",
     "moreSkills": "Mostrar todas",
-    "lessSkills": "Mostrar menos"
+    "lessSkills": "Mostrar menos",
+    "noData": "Sin datos"
   },
   "navigation": {
     "jobSearch": "Buscar ofertas laborales",
@@ -40,7 +41,9 @@
     "goBack": "Regresar",
     "quickApply": "Aplicar",
     "close": "Cerrar",
-    "proceed": "Ir al sitio"
+    "proceed": "Ir al sitio",
+    "showMore": "Mostrar más",
+    "showLess": "Mostrar menos"
   },
   "forms":{
     "jobSearch": "Buscar trabajos",

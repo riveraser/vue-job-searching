@@ -31,7 +31,8 @@
     "applyJobText": "Ceci est une démo en Vuejs seulement: vous devez vous rendre au site torre.co pour postuler. Voulez-vous accéder à torre.co?",
     "currentSkills": "Compétences actuelles",
     "moreSkills": "Montrer toutes les compétences",
-    "lessSkills": "Montrar moins"
+    "lessSkills": "Montrar moins",
+    "noData": "Sans données"
   },
   "navigation": {
     "jobSearch": "Rechercher des offres d'emploi",
@@ -40,7 +41,9 @@
     "goBack": "Retourner",
     "quickApply": "Apliquer",
     "close": "Fermer",
-    "proceed": "Aller au site"
+    "proceed": "Aller au site",
+    "showMore": "Montrer plus",
+    "showLess": "Montrear moins"
   },
   "forms":{
     "jobSearch": "Chercher un emploi",

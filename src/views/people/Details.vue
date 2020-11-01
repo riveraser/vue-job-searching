@@ -99,31 +99,25 @@
           <v-divider></v-divider>
           <v-card-text>
             <h3 class="text--primary">{{ $t("template.currentSkills") }}</h3>
-            <v-chip-group v-if="personSkill && personSkill.length > 0" column>
-              <v-chip
-                v-for="skill in personSkill"
-                v-bind:key="`${skill.code}-${skill.name}`"
-                ><v-avatar left class="green"> {{ skill.weight }} </v-avatar
-                >{{ skill.name }}</v-chip>
-              <v-chip
-                color="pink"
-                label
-                text-color="white"
-                v-if="peopleDetail.strengths.length > MAX_SKILL"
-                @click="showAllSkills = !showAllSkills"
+            <ShowMore
+              :minHeight="90"
+              v-if="peopleDetail.strengths && peopleDetail.strengths.length > 0"
+            >
+              <v-chip-group
+                v-if="
+                  peopleDetail.strengths && peopleDetail.strengths.length > 0
+                "
+                column
               >
-                {{
-                  $t(
-                    !showAllSkills
-                      ? "template.moreSkills"
-                      : "template.lessSkills"
-                  )
-                }}
-                <v-icon right v-if="!showAllSkills">mdi-plus</v-icon>
-                <v-icon v-if="showAllSkills" right>mdi-minus</v-icon>
-              </v-chip>
-              
-            </v-chip-group>
+                <v-chip
+                  v-for="skill in peopleDetail.strengths"
+                  v-bind:key="`${skill.code}-${skill.name}`"
+                  ><v-avatar left class="green"> {{ skill.weight }} </v-avatar
+                  >{{ skill.name }}</v-chip
+                >
+              </v-chip-group>
+            </ShowMore>
+            <div v-else>- {{ $t("template.noData") }} -</div>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
@@ -172,19 +166,20 @@
 <script lang="ts">
 import { Vue, Component, MapAction, MapGetter, Watch } from "types-vue";
 import GoBackBtn from "@/components/GoBackBtn.vue";
+import ShowMore from "@/components/ShowMore";
+
 import _GroupBy from "lodash/groupBy";
 import helpers from "@/helpers";
 
 @Component({
   components: {
-    GoBackBtn
+    GoBackBtn,
+    ShowMore
   }
 })
 export default class Home extends Vue {
   private detailId?: string = "";
   private sheet?: boolean = false;
-  private showAllSkills?: boolean = false;
-  private MAX_SKILL = 5;
 
   @MapGetter()
   getProcessing?: boolean;
@@ -228,23 +223,6 @@ export default class Home extends Vue {
     return this.getProcessing || false;
   }
 
-  get personSkill() {
-    if (this.peopleDetail.strengths) {
-      if (this.showAllSkills) {
-        return this.peopleDetail.strengths || [];
-      } else {
-        const notAll = this.peopleDetail.strengths.slice(
-          0,
-          this.peopleDetail.strengths.length > this.MAX_SKILL
-            ? this.MAX_SKILL
-            : this.peopleDetail.strengths
-        );
-        return notAll;
-      }
-    } else {
-      return [];
-    }
-  }
   /*get detailedDescription() {
     const details = this.peopleDetail.details;
     return _GroupBy(details, "code");

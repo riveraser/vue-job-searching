@@ -19,6 +19,7 @@
     "vue-class-component": "^7.2.3",
     "vue-i18n": "^8.22.1",
     "vue-property-decorator": "^8.4.2",
+    "vue-resize": "^0.5.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.11",

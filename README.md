@@ -7,7 +7,7 @@ Preview at https://sergiorivera.me/vue-search-jobs/
 
 I had some CORS errors while trying to get Username details so I am getting throught a PHP page.
 
-I am using https://www.npmjs.com/package/vue-types by the way to simplify access to Vuex store from components
+I am using https://github.com/fernandoescolar/types-vue by the way to simplify access to Vuex store from components
 
 Thanks
 
